@@ -1,5 +1,6 @@
 const express = require("express")
 const bodyParser = require("body-parser")
+const jwt = require("jsonwebtoken")
 const fs = require("fs")
 const { timeout } = require("./utils")
 
@@ -28,7 +29,6 @@ app.use(timeout)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// Your code here
 app.get("/user-info", (req, res) => {
 	if (!req.headers.authorization) {
 		res.status(401).send("Error: client unauthorized")
@@ -53,7 +53,6 @@ app.get("/user-info", (req, res) => {
 	const user = users[userInfo.userName]
 	const userWithRestrictedFields = {}
 	const scope = userInfo.scope.split(" ")
-
 	for (let i = 0; i < scope.length; i++) {
 		const field = scope[i].slice("permission:".length)
 		userWithRestrictedFields[field] = user[field]
